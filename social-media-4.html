@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Featured Speakers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background: black;
+        color: white;
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .hero-section {
+        padding: 120px 0;
+      }
+      .container-width {
+        width: 100%;
+        max-width: 1142px;
+        padding: 0 16px;
+        margin: 0 auto;
+      }
+      .header {
+        text-align: left;
+        max-width: 1200px;
+        font-size: 48px;
+        font-weight: bold;
+        padding-left: 20px;
+      }
+      .hero-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .view-all {
+        padding: 10px 20px;
+        background: white;
+        color: black;
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .view-all:hover {
+        transform: scale(1.05);
+      }
+
+      .container {
+        display: flex;
+        max-width: 1200px;
+        margin-top: 50px;
+        border: 1px solid #333;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .speakers-list {
+        flex: 1;
+        border-right: 1px solid #333;
+        background: #000;
+      }
+
+      .speaker {
+        padding: 20px;
+        border-bottom: 1px solid #333;
+        cursor: pointer;
+        color: #888;
+        transition: background 0.3s, color 0.3s;
+        position: relative;
+      }
+
+      .speaker:hover {
+        color: white;
+        background: #111;
+      }
+
+      .speaker.active {
+        background: linear-gradient(90deg, #111 0%, #222 100%);
+        color: white;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+      }
+
+      .speaker:hover .social-icons,
+      .speaker.active .social-icons {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      .speaker:hover .social-icons,
+      .speaker.active .social-icons {
+        height: 20px; /* adjust as needed */
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .speaker-photo {
+        width: 50%;
+        background: #111;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-direction: column;
+      }
+
+      .speaker-content {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        position: absolute;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      .speaker-content.active {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .speaker-content figure {
+        max-width: 200px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        animation: zoomIn 0.6s ease;
+      }
+
+      @keyframes zoomIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .photo-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .photo-role {
+        font-size: 14px;
+        color: #aaa;
+      }
+
+      @media screen and (max-width: 767px) {
+        .container {
+          flex-direction: column;
+          border: none;
+        }
+
+        .hero-info {
+          flex-wrap: wrap;
+        }
+
+        .speakers-list {
+          width: 100%;
+          border-right: none;
+        }
+
+        .speaker-photo {
+          display: none;
+        }
+
+        .speaker-content {
+          display: none;
+          opacity: 1;
+          transform: none;
+          position: static;
+          padding: 20px;
+          background: #111;
+          border-top: 1px solid #333;
+        }
+
+        .speaker-content.active {
+          display: flex;
+        }
+
+        .speaker + .speaker-content {
+          margin-bottom: 10px;
+        }
+        .speaker-content.active {
+          animation: none;
+        }
+        .header {
+          font-size: 16px;
+        }
+      }
+      @media (max-width: 1199px) {
+        .container-width {
+          max-width: 960px;
+        }
+      }
+      @media (max-width: 991px) {
+        .container-width {
+          max-width: 720px;
+        }
+      }
+      @media (max-width: 767px) {
+        .container-width {
+          max-width: 100%;
+          width: auto;
+          padding: 0 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero-section">
+      <div class="container-width">
+        <div class="hero-info">
+          <div class="header">Featured Speakers</div>
+          <button class="view-all">View All Speakers →</button>
+        </div>
+        <div class="container">
+          <div class="speakers-list">
+            <div class="speaker" data-id="speaker1">
+              Guillermo Rauch
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+            <div class="speaker" data-id="speaker2">
+              Jeanne Grosser
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+            <div class="speaker" data-id="speaker3">
+              Pepijn Senders
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+            <div class="speaker" data-id="speaker4">
+              Malavika Balachandran Tadeusz
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+            <div class="speaker" data-id="speaker5">
+              Tomas Jansson
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+            <div class="speaker" data-id="speaker6">
+              Joe Zeng
+              <div class="social-icons">
+                <a href="#"
+                  ><img src="./image/footer-icon-linkedin.svg" alt="LinkedIn"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-icon-twitter.svg" alt="Twitter"
+                /></a>
+                <a href="#"
+                  ><img src="./image/footer-lcon-github.svg" alt="GitHub"
+                /></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-photo">
+            <div class="speaker-content" id="speaker1">
+              <figure>
+                <img
+                  src="./image/joe_statsig_vercel_ship_25.jpg"
+                  alt="Guillermo Rauch"
+                />
+              </figure>
+              <div class="photo-title">Guillermo Rauch</div>
+              <div class="photo-role">CEO, Vercel</div>
+            </div>
+            <div class="speaker-content" id="speaker2">
+              <figure>
+                <img src="./image/images-1.jpeg" alt="Jeanne Grosser" />
+              </figure>
+              <div class="photo-title">Jeanne Grosser</div>
+              <div class="photo-role">COO, Vercel</div>
+            </div>
+            <div class="speaker-content" id="speaker3">
+              <figure>
+                <img src="./image/images-2.jpeg" alt="Pepijn Senders" />
+              </figure>
+              <div class="photo-title">Pepijn Senders</div>
+              <div class="photo-role">VP, Design</div>
+            </div>
+            <div class="speaker-content" id="speaker4">
+              <figure>
+                <img src="./image/images-3.jpeg" alt="Malavika" />
+              </figure>
+              <div class="photo-title">Malavika Balachandran Tadeusz</div>
+              <div class="photo-role">Engineer</div>
+            </div>
+            <div class="speaker-content" id="speaker5">
+              <figure>
+                <img src="./image/images-5.jpeg" alt="Tomas Jansson" />
+              </figure>
+              <div class="photo-title">Tomas Jansson</div>
+              <div class="photo-role">Developer Advocate</div>
+            </div>
+            <div class="speaker-content" id="speaker6">
+              <figure>
+                <img
+                  src="./image/joe_statsig_vercel_ship_25.jpg"
+                  alt="Joe Zeng"
+                />
+              </figure>
+              <div class="photo-title">Joe Zeng</div>
+              <div class="photo-role">Product Manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const speakers = document.querySelectorAll(".speaker");
+      const contentSections = document.querySelectorAll(".speaker-content");
+      const speakerPhoto = document.querySelector(".speaker-photo");
+      let currentIndex = 0;
+      let intervalId;
+
+      function activateSpeakerByIndex(index) {
+        const id = speakers[index].dataset.id;
+        activateSpeaker(id);
+      }
+
+      function activateSpeaker(targetId) {
+        speakers.forEach((s) => s.classList.remove("active"));
+        contentSections.forEach((c) => c.classList.remove("active"));
+
+        const activeSpeaker = document.querySelector(
+          `.speaker[data-id="${targetId}"]`
+        );
+        const activeContent = document.getElementById(targetId);
+        if (activeSpeaker && activeContent) {
+          activeSpeaker.classList.add("active");
+          activeContent.classList.add("active");
+          currentIndex = Array.from(speakers).indexOf(activeSpeaker);
+        }
+      }
+
+      function startAutoRotate() {
+        stopAutoRotate();
+        intervalId = setInterval(() => {
+          currentIndex = (currentIndex + 1) % speakers.length;
+          activateSpeakerByIndex(currentIndex);
+        }, 9000000);
+      }
+
+      function stopAutoRotate() {
+        clearInterval(intervalId);
+      }
+
+      function moveContentToSpeakers() {
+        if (window.innerWidth <= 767) {
+          contentSections.forEach((content) => {
+            const id = content.id;
+            const speaker = document.querySelector(`.speaker[data-id="${id}"]`);
+            if (speaker && speaker.nextElementSibling !== content) {
+              speaker.insertAdjacentElement("afterend", content);
+            }
+          });
+        } else {
+          contentSections.forEach((content) => {
+            if (!speakerPhoto.contains(content)) {
+              speakerPhoto.appendChild(content);
+            }
+          });
+        }
+      }
+
+      speakers.forEach((speaker, index) => {
+        speaker.addEventListener("mouseenter", () => {
+          if (window.innerWidth > 767) {
+            activateSpeakerByIndex(index);
+          }
+        });
+
+        speaker.addEventListener("click", () => {
+          if (window.innerWidth <= 767) {
+            const id = speaker.dataset.id;
+            const isActive = speaker.classList.contains("active");
+
+            speakers.forEach((s) => s.classList.remove("active"));
+            contentSections.forEach((c) => c.classList.remove("active"));
+
+            if (!isActive) {
+              speaker.classList.add("active");
+              document.getElementById(id).classList.add("active");
+            }
+          }
+        });
+      });
+
+      window.addEventListener("DOMContentLoaded", () => {
+        activateSpeakerByIndex(0);
+        startAutoRotate();
+        moveContentToSpeakers();
+      });
+
+      window.addEventListener("resize", moveContentToSpeakers);
+    </script>
+  </body>
+</html>
