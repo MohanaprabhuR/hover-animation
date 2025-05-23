@@ -98,6 +98,11 @@
         transition: opacity 0.4s ease, transform 0.4s ease;
       }
 
+      .social-icons img {
+        width: 16px;
+        height: 16px;
+      }
+
       .speaker:hover .social-icons,
       .speaker.active .social-icons {
         opacity: 1;
@@ -106,7 +111,7 @@
 
       .social-icons {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         margin-top: 10px;
         height: 0;
         overflow: hidden;
@@ -441,7 +446,7 @@
         intervalId = setInterval(() => {
           currentIndex = (currentIndex + 1) % speakers.length;
           activateSpeakerByIndex(currentIndex);
-        }, 9000000);
+        }, 3000);
       }
 
       function stopAutoRotate() {
