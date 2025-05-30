@@ -93,26 +93,6 @@
         display: flex;
         gap: 10px;
         margin-top: 10px;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-      }
-
-      .social-icons img {
-        width: 16px;
-        height: 16px;
-      }
-
-      .speaker:hover .social-icons,
-      .speaker.active .social-icons {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .social-icons {
-        display: flex;
-        gap: 12px;
-        margin-top: 10px;
         height: 0;
         overflow: hidden;
         transition: height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
@@ -122,7 +102,7 @@
 
       .speaker:hover .social-icons,
       .speaker.active .social-icons {
-        height: 20px; /* adjust as needed */
+        height: 20px;
         opacity: 1;
         transform: translateY(0);
       }
@@ -244,6 +224,9 @@
         }
         .header {
           font-size: 16px;
+        }
+        .photo-title {
+          font-size: 20px;
         }
       }
       @media (max-width: 1199px) {
@@ -420,6 +403,7 @@
       const speakerPhoto = document.querySelector(".speaker-photo");
       let currentIndex = 0;
       let intervalId;
+      let wasDesktop = window.innerWidth > 767;
 
       function activateSpeakerByIndex(index) {
         const id = speakers[index].dataset.id;
@@ -446,7 +430,7 @@
         intervalId = setInterval(() => {
           currentIndex = (currentIndex + 1) % speakers.length;
           activateSpeakerByIndex(currentIndex);
-        }, 3000);
+        }, 4000);
       }
 
       function stopAutoRotate() {
@@ -474,7 +458,14 @@
       speakers.forEach((speaker, index) => {
         speaker.addEventListener("mouseenter", () => {
           if (window.innerWidth > 767) {
+            stopAutoRotate();
             activateSpeakerByIndex(index);
+          }
+        });
+
+        speaker.addEventListener("mouseleave", () => {
+          if (window.innerWidth > 767) {
+            startAutoRotate();
           }
         });
 
@@ -496,11 +487,23 @@
 
       window.addEventListener("DOMContentLoaded", () => {
         activateSpeakerByIndex(0);
-        startAutoRotate();
         moveContentToSpeakers();
+        if (window.innerWidth > 767) {
+          startAutoRotate();
+        }
       });
 
-      window.addEventListener("resize", moveContentToSpeakers);
+      window.addEventListener("resize", () => {
+        moveContentToSpeakers();
+
+        const isDesktop = window.innerWidth > 767;
+        if (isDesktop && !wasDesktop) {
+          startAutoRotate();
+        } else if (!isDesktop && wasDesktop) {
+          stopAutoRotate();
+        }
+        wasDesktop = isDesktop;
+      });
     </script>
   </body>
 </html>
